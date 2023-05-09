@@ -1,25 +1,31 @@
-""" This script runs the artic pipeline with Nanopore reads that have already been basecalled and demultiplexed. Variant calling is done by the experimental medaka pipeline. 
+""" This script runs the artic pipeline with Nanopore reads that have already been basecalled and demultiplexed. Variant calling is done by the experimental medaka pipeline.
 It is specificially made for RSV samples as it determines the subtype and chooses the reference that matches the given reads the most."""
 import os
 import sys
+import argparse
 
-# Variables that need to be changed by the user
-# Path containing your reads that should be located in the corresponding barcode directory
-path_to_reads = "/home/duyen/RSV/sequencing_runs/2023-02-15/693/barcode76/"
-# Name of your sample
-sample = "693"
-# Name of the sequencing run
-run_name = "2023-02-15_693"
-# Output directory
-output_dir = "693_artic_output"
+parser = argparse.ArgumentParser()
+
+
+parser.add_argument("-i", "--input", help = "path to basecalled, demultiplexed fastq-files", required = True)
+parser.add_argument("-s", "--sample", help = "name of the sample", required = True)
+parser.add_argument("-r", "--runName", help = "name of the run", required = True)
+parser.add_argument("-o", "--outputDir", help = "output directory", required = True)
+parser.add_argument("-m", "--medakaModel", help = "medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
+
+args = parser.parse_args()
+
+path_to_reads = args.input
+sample = args.sample
+run_name = args.runName
+output_dir = args.outputDir
+medaka_model = args.medakaModel
+
 # Path that contains all references. This includes a combined reference file containing all references (20), a reference file containing only references with the subtype A (10), a reference file
 # containing only references with the subtype B (10) and all reference files separately.
 path_to_reference = "/home/duyen/RSV/references/consensus_sequences/fasta/"
 # Path that contains the primer scheme "RSV-2023"
 path_to_primer_scheme =  "/home/duyen/RSV/primer_scheme/final_scheme/"
-# Medaka model
-medaka_model = "r941_min_high_g360"
-
 
 
 # Subtype detection (subtype A or subtype B)
