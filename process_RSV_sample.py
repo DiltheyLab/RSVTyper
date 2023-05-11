@@ -7,11 +7,20 @@ import argparse
 parser = argparse.ArgumentParser()
 
 
-parser.add_argument("-i", "--input", help = "path to basecalled, demultiplexed fastq-files", required = True)
-parser.add_argument("-s", "--sample", help = "name of the sample", required = True)
-parser.add_argument("-r", "--runName", help = "name of the run", required = True)
-parser.add_argument("-o", "--outputDir", help = "output directory", required = True)
-parser.add_argument("-m", "--medakaModel", help = "medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
+path_to_python_file = os.path.abspath(os.path.dirname(__file__))
+# Path that contains all references. This includes a combined reference file containing all references (20), a reference file containing only references with the subtype A (10), a reference file
+# containing only references with the subtype B (10) and all reference files separately.
+path_to_reference = path_to_python_file + "/references/"
+# Path that contains the primer scheme "RSV-2023"
+path_to_primer_scheme =  path_to_python_file + "/primer_scheme/"
+
+parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed fastq-files. It should end with the barcode directory (e.g. barcode15/)", required = True)
+parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
+parser.add_argument("-r", "--runName", help = "Name of the run", required = True)
+parser.add_argument("-o", "--outputDir", help = "Output directory", required = True)
+parser.add_argument("-m", "--medakaModel", help = "Medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
+parser.add_argument("-a", "--schemeDir", help = "Path to primal scheme if the location of it was changed", default = path_to_primer_scheme)
+parser.add_argument("-b", "--refDir", help = "Path to directory containing the references if the location was changed", default = path_to_reference)
 
 args = parser.parse_args()
 
@@ -20,12 +29,8 @@ sample = args.sample
 run_name = args.runName
 output_dir = args.outputDir
 medaka_model = args.medakaModel
-
-# Path that contains all references. This includes a combined reference file containing all references (20), a reference file containing only references with the subtype A (10), a reference file
-# containing only references with the subtype B (10) and all reference files separately.
-path_to_reference = "/home/duyen/RSV/references/consensus_sequences/fasta/"
-# Path that contains the primer scheme "RSV-2023"
-path_to_primer_scheme =  "/home/duyen/RSV/primer_scheme/final_scheme/"
+path_to_primer_scheme = args.schemeDir
+path_to_reference = args.refDir
 
 
 # Subtype detection (subtype A or subtype B)
