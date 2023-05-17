@@ -23,4 +23,4 @@ os.chdir(output_dir)
 os.system(f"artic guppyplex --skip-quality-check --min-length 350 --max-length 900 --directory {path_to_reads[:-1]} --prefix demultiplexed")
 
 # Medaka
-os.system(f"artic minion --medaka --medaka-model {medaka_model} --normalise 200 --threads 4 --scheme-directory {path_to_primer_scheme[:-1]} --read-file {run_name}_{barcode}.fastq RSV-2023/{version} {sample}")
+os.system(f"artic minion --medaka --medaka-model {medaka_model} --normalise 200 --threads 4 --scheme-directory {path_to_primer_scheme[:-1]} --read-file demultiplexed_{barcode}.fastq RSV-2023/{version} {sample}")
