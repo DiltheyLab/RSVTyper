@@ -178,12 +178,10 @@ with open(output_dir + "/subtype_and_reference.txt", "a") as fout:
 # Convert reference to directory in which the correct primal scheme for that reference lies
 if "A" in final_reference:
     cluster_no = final_reference.split("_")[-2]
-    version = "V" + cluster_no
+    version = "VA" + cluster_no
 if "B" in final_reference:
     cluster_no = final_reference.split("_")[-2]
-    version = "V1" + cluster_no
-    if version == "V110":
-        version = "V20"
+    version = "VB" + cluster_no
 
 # Variables needed for the artic pipeline will be written into a separate file
 with open("variables_for_artic.txt", "w") as fout:
