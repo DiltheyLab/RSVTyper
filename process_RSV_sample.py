@@ -41,7 +41,7 @@ coverage_summary = f"{sample}_coverage_summary.txt"
 alignment = f"{sample}_vs_{reference_subtype[:-6]}"
 
 # The reads are mapped to a combined fasta file of all reference sequences containing both subtypes. 
-minimap_command = f"minimap2 -ax map-ont {path_to_reference}{reference_subtype} {path_to_reads}*gz > {path_to_subtype_detection}/{alignment}.sam"
+minimap_command = f"minimap2 -ax map-ont {path_to_reference}{reference_subtype} {path_to_reads}/*gz > {path_to_subtype_detection}/{alignment}.sam"
 os.system(minimap_command)
 
 # Only primary alignments are used for the subtype detection. 
@@ -142,7 +142,7 @@ reference_selection_directory = f"{output_dir}/{sample}_reference_selection"
 os.system("mkdir " + reference_selection_directory)
 # Mapping the reads to a combined fasta file containing all references of the detected subtype. 
 paf_output = f"{sample}_vs_cluster_{final_subtype}.paf"
-minimap_command_ref = f"minimap2 -c -x map-ont {path_to_reference}cluster_{final_subtype}_consensus_all.fasta {path_to_reads}*gz > {reference_selection_directory}/{paf_output}"
+minimap_command_ref = f"minimap2 -c -x map-ont {path_to_reference}cluster_{final_subtype}_consensus_all.fasta {path_to_reads}/*gz > {reference_selection_directory}/{paf_output}"
 os.system(minimap_command_ref)
 
 # This counts the number of primary alignments for each reference. 
