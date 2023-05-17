@@ -16,7 +16,6 @@ path_to_primer_scheme =  path_to_python_file + "/primer_scheme/"
 
 parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed fastq-files. It should end with the barcode directory (e.g. barcode15/)", required = True)
 parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
-parser.add_argument("-r", "--runName", help = "Name of the run", required = True)
 parser.add_argument("-o", "--outputDir", help = "Output directory", required = True)
 parser.add_argument("-m", "--medakaModel", help = "Medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
 parser.add_argument("-a", "--schemeDir", help = "Path to primal scheme if the location of it was changed", default = path_to_primer_scheme)
@@ -26,7 +25,6 @@ args = parser.parse_args()
 
 path_to_reads = args.input
 sample = args.sample
-run_name = args.runName
 output_dir = args.outputDir
 medaka_model = args.medakaModel
 path_to_primer_scheme = args.schemeDir
@@ -190,7 +188,6 @@ if "B" in final_reference:
 # Variables needed for the artic pipeline will be written into a separate file
 with open("variables_for_artic.txt", "w") as fout:
     fout.write("path_to_reads: " + path_to_reads + "\n")
-    fout.write("run_name: " + run_name + "\n")
     fout.write("medaka_model: " + medaka_model + "\n")
     fout.write("path_to_primer_scheme: " + path_to_primer_scheme + "\n")
     fout.write("version: " + version + "\n")
