@@ -2,6 +2,8 @@
 import os
 import argparse
 
+parser = argparse.ArgumentParser()
+
 parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed fastq-files. It should end with the barcode directory (e.g. barcode15/)", required = True)
 parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
 parser.add_argument("-o", "--outputDir", help = "Output directory", required = True)
