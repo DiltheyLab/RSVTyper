@@ -4,6 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
+path_to_python_file = os.path.abspath(os.path.dirname(__file__))
 path_to_primer_scheme =  path_to_python_file + "/primer_scheme/"
 
 parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed fastq-files. It should end with the barcode directory (e.g. barcode15/)", required = True)
