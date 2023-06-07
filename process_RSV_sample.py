@@ -182,15 +182,6 @@ if "A" in final_reference:
 if "B" in final_reference:
     cluster_no = final_reference.split("_")[-2]
     version = "VB" + cluster_no
-
-# Variables needed for the artic pipeline will be written into a separate file
-with open("variables_for_artic.txt", "w") as fout:
-    fout.write("path_to_reads: " + path_to_reads + "\n")
-    fout.write("medaka_model: " + medaka_model + "\n")
-    fout.write("path_to_primer_scheme: " + path_to_primer_scheme + "\n")
-    fout.write("version: " + version + "\n")
-    fout.write("sample: " + sample + "\n")
-    fout.write("output_dir: " + output_dir + "\n")
     
 # Running the artic pipeline in the conda environment
-os.system("conda run -n artic-ncov2019 python3 artic_pipeline.py")
+os.system(f"conda run -n artic-ncov2019 python3 artic_pipeline.py -i {path_to_reads} -m {medaka_model} -a {path_to_primer_scheme} -v {version} -s {sample}")
