@@ -66,12 +66,12 @@ with open(f"{path_to_subtype_detection}/{coverage_summary}", "w") as fout:
     for i in range(1, 11):
         consensus_seq = "cluster_A_" + str(i) + "_consensus"
         samtools_coverage = f"samtools coverage -r {consensus_seq}:3400-5400 {path_to_subtype_detection}/{primary_alignment}.sorted.bam"
-        creating_coverage_summary = f"({samtools_coverage} &) >> {path_to_subtype_detection}/{coverage_summary}"
+        creating_coverage_summary = f"({samtools_coverage}) >> {path_to_subtype_detection}/{coverage_summary}"
         os.system(creating_coverage_summary)
     for i in range(1, 11):
         consensus_seq = "cluster_B_" + str(i) + "_consensus"
         samtools_coverage = f"samtools coverage -r {consensus_seq}:3400-5400 {path_to_subtype_detection}/{primary_alignment}.sorted.bam"
-        creating_coverage_summary = f"({samtools_coverage} &) >> {path_to_subtype_detection}/{coverage_summary}"
+        creating_coverage_summary = f"({samtools_coverage}) >> {path_to_subtype_detection}/{coverage_summary}"
         os.system(creating_coverage_summary)
         
 # This ensures that the program continues only after the output of all references has been written into the coverage summary file.
