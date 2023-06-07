@@ -1,28 +1,29 @@
 ### This program executes the artic pipeline with all necessary variables.
 import os
-variable_list = []
-with open("variables_for_artic.txt", "r") as fin:
-    for line in fin:
-        line = line.rstrip()
-        variable = line.split()[-1]
-        variable_list.append(variable)
+import argparse
 
+parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed fastq-files. It should end with the barcode directory (e.g. barcode15/)", required = True)
+parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
+parser.add_argument("-o", "--outputDir", help = "Output directory", required = True)
+parser.add_argument("-m", "--medakaModel", help = "Medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
+parser.add_argument("-a", "--schemeDir", help = "Path to primer scheme if the location of it was changed", default = path_to_primer_scheme)
+parser.add_argument("-v", "--version", required = True)
 
-path_to_reads = variable_list[0]
+args = parser.parse_args()
+
+path_to_reads = args.input
 if path_to_reads[-1] == "/":
     path_to_reads = path_to_reads[:-1]
+
+output_dir = args.outputDir
+medaka_model = args.medakaModel
+path_to_primer_scheme = args.schemeDir
 barcode_list = path_to_reads.split("/")
 for element in barcode_list:
     if "barcode" in element:
         barcode = element
-medaka_model = variable_list[1]
-path_to_primer_scheme = variable_list[2]
-version = variable_list[3]
-sample = variable_list[4]
-output_dir = variable_list[5]
-
-os.system(f"mv variables_for_artic.txt {output_dir}")
-os.chdir(output_dir)
+version = args.version
+sample = args.sample
 
 # Read filtering
 os.system(f"artic guppyplex --skip-quality-check --min-length 350 --max-length 900 --directory {path_to_reads} --prefix demultiplexed")
