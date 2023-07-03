@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """ This script runs the artic pipeline with Nanopore reads that have already been basecalled and demultiplexed. Variant calling is done by the experimental medaka pipeline.
 It is specificially made for RSV samples as it determines the subtype and chooses the reference that matches the given reads the most."""
 import os
