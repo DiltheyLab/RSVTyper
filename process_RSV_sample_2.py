@@ -194,4 +194,6 @@ os.system(f"conda run -n artic-ncov2019 python3 {path_to_python_file}/artic_pipe
 # Running nextclade
 subtype = final_subtype.lower()
 consensus_seq = f"{sample}.consensus.fasta"
-os.system(f"nextclade run -D {path_to_datasets}{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq}")
+os.system(f"nextclade run -D {path_to_datasets}{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+# alternative nextclade command
+#os.system(f"nextclade run -d rsv_{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq}" --output-basename '{sample}_nextclade'"
