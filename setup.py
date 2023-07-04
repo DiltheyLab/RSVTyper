@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from distutils.core import setup
+from setuptools import setup
 setup(name="rsv-typer",
       version="0.1",
       description="Genotyping RSV samples from nanopore sequencing data",
