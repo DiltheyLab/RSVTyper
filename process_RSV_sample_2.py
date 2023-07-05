@@ -23,7 +23,7 @@ parser.add_argument("-m", "--medakaModel", help = "Medaka model that should be u
 parser.add_argument("-p", "--schemeDir", help = "Path to primal scheme if the location of it was changed", default = path_to_primer_scheme)
 parser.add_argument("-r", "--refDir", help = "Path to directory containing the references if the location was changed", default = path_to_reference)
 parser.add_argument("-n", "--nextcladeOutput", help = "Output file format of the nextclade results (tsv, csv, json, ndjson, all). Default: tsv", default = "tsv")
-parser.add_argument("-d", "--datasetDir", help = "Path to datasets if changed. Subtype-specific datasets should be stored in separate directories ending with the subtype in lower case (e. g. rsv_a)", default = path_to_datasets)
+#parser.add_argument("-d", "--datasetDir", help = "Path to datasets if changed. Subtype-specific datasets should be stored in separate directories ending with the subtype in lower case (e. g. rsv_a)", default = path_to_datasets)
 args = parser.parse_args()
 
 path_to_reads = args.input
@@ -33,7 +33,7 @@ medaka_model = args.medakaModel
 path_to_primer_scheme = args.schemeDir
 path_to_reference = args.refDir
 nextclade_output = args.nextcladeOutput
-path_to_datasets = args.datasetDir
+#path_to_datasets = args.datasetDir
 
 
 # Subtype detection (subtype A or subtype B)
@@ -179,7 +179,7 @@ with open(f"{reference_selection_directory}/{output_ref_select}", "w") as fout:
 print("Reference: " + final_reference)
 with open(output_dir + "/subtype_and_reference.txt", "a") as fout:
     fout.write("Reference: " + final_reference)
-        
+
 # Convert reference to directory in which the correct primal scheme for that reference lies
 if "A" in final_reference:
     cluster_no = final_reference.split("_")[-2]
@@ -194,6 +194,17 @@ os.system(f"conda run -n artic-ncov2019 python3 {path_to_python_file}/artic_pipe
 # Running nextclade
 subtype = final_subtype.lower()
 consensus_seq = f"{sample}.consensus.fasta"
-os.system(f"nextclade run -D {path_to_datasets}{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+#os.system(f"nextclade run -D {path_to_datasets}{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
 # alternative nextclade command
-#os.system(f"nextclade run -d rsv_{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq}" --output-basename '{sample}_nextclade'"
+os.system(f"nextclade run -d rsv_{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+
+with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+    for line in fin:
+        line = line.rstrip()
+        line_list = line.split()
+        if line_list[0] != "index":
+            clade = line_list[3]
+            g_clade = line_list[4]
+
+with open(output_dir + "/final_summary.txt", "a") as fout:
+    fout.write("Clade: " + clade + "\n")
