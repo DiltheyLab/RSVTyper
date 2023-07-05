@@ -9,7 +9,7 @@ setup(name="rsv-typer",
       package_data={"rsv-typer": ["references/*", "primer_scheme/*"]},
       entry_points={
           "console_scripts": [
-              "rsv-typer=process_RSV_sample:main"
+              "rsv-typer=rsv-typer.process_RSV_sample:main"
               ]
           }
       )
