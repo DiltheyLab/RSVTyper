@@ -135,8 +135,8 @@ elif subtype_A == False and subtype_B == False:
     sys.exit("Error: Sample cannot be matched to any subtype. Not enough reads?")
 
 # The subtype and the final reference chosen for the artic pipeline are written into a file. 
-subtype_reference_summary = "subtype_and_reference.txt"
-with open(output_dir + "/" + subtype_reference_summary, "w") as fout:
+final_summary = "final_summary.txt"
+with open(output_dir + "/" + final_summary, "w") as fout:
     fout.write("Subtype: " + final_subtype + "\n")
     
     
@@ -177,8 +177,8 @@ with open(f"{reference_selection_directory}/{output_ref_select}", "w") as fout:
         fout.write(item[0] + "\t" + str(item[1]) + "\n")
 
 print("Reference: " + final_reference)
-with open(output_dir + "/subtype_and_reference.txt", "a") as fout:
-    fout.write("Reference: " + final_reference)
+with open(output_dir + "/" + final_summary, "a") as fout:
+    fout.write("Reference: " + final_reference + "\n")
 
 # Convert reference to directory in which the correct primal scheme for that reference lies
 if "A" in final_reference:
@@ -208,3 +208,4 @@ with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
 
 with open(output_dir + "/final_summary.txt", "a") as fout:
     fout.write("Clade: " + clade + "\n")
+    fout.write("G clade: " + g_clade)
