@@ -5,11 +5,11 @@ setup(name="rsv-typer",
       description="Genotyping RSV samples from nanopore sequencing data",
       url="https://github.com/DiltheyLab/RSVTyper",
       packages=["rsv-typer"],
-      package_dir={"rsv-typer": "rsv-typer"},
+      package_dir={"rsv-typer": "rsv_typer"},
       package_data={"rsv-typer": ["references/*", "primer_scheme/*"]},
       entry_points={
           "console_scripts": [
-              "rsv-typer=rsv-typer.process_RSV_sample:main"
+              "rsv-typer=rsv_typer.process_RSV_sample:main"
               ]
           }
       )
