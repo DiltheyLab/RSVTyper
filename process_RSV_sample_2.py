@@ -3,6 +3,7 @@ It is specificially made for RSV samples as it determines the subtype and choose
 import os
 import sys
 import argparse
+import re
 
 parser = argparse.ArgumentParser()
 
@@ -194,18 +195,50 @@ os.system(f"conda run -n artic-ncov2019 python3 {path_to_python_file}/artic_pipe
 # Running nextclade
 subtype = final_subtype.lower()
 consensus_seq = f"{sample}.consensus.fasta"
-#os.system(f"nextclade run -D {path_to_datasets}{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
-# alternative nextclade command
+
 os.system(f"nextclade run -d rsv_{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
 
+
+# Writing out the clades into final_summary.txt
+
+if nextclade_output == "all":
+    nextclade_output = "tsv"
 with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
     for line in fin:
         line = line.rstrip()
-        line_list = line.split()
-        if line_list[0] != "index":
-            clade = line_list[3]
-            g_clade = line_list[4]
+        if nextclade_output == "tsv" or nextclade_output == "csv":
+            if nextclade_output == "tsv":
+                line_list = line.split("\t")
+            elif nextclade_output == "csv":
+                line_list = line.split(";")
+            if line_list[0] != "index":
+                clade = line_list[2]
+                g_clade = line_list[3]
+        if nextclade_output == "json":
+            if "\"clade\":" in line:
+                line_list = line.split()
+                clade = line_list[1][1:-2]
+            if "\"G_clade\":" in line:
+                line_list = line.split()
+                g_clade = line_list[1][1:-2]
+
+if nextclade_output == "ndjson":
+    clade = ""
+    g_clade = ""
+    with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+        line_list = re.findall("\{(.*?)\}", line)
+    for element in line_list:
+        if "\"G_clade\"" in element:
+                new_list = element.split(":")
+                g_clade = new_list[1][1:-2]
+        elif "clade" in element:
+                new_list = element.split(":")
+                clade = new_list[1][1:-2]
 
 with open(output_dir + "/final_summary.txt", "a") as fout:
     fout.write("Clade: " + clade + "\n")
     fout.write("G clade: " + g_clade)
+
+print("Clade: " + clade)
+print("G clade: " + g_clade)
+print("Pipeline finished. View results in the output file \"final_summary.txt\".")
