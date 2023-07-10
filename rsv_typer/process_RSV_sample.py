@@ -187,7 +187,7 @@ def main():
         version = "VB" + cluster_no
 
     # Running the artic pipeline in the conda environment
-    os.system(f"conda run -n artic-ncov2019 python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -a {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
+    os.system(f"python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -a {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
 
     # Running nextclade
     subtype = final_subtype.lower()
