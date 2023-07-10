@@ -4,10 +4,10 @@ It is specificially made for RSV samples as it determines the subtype and choose
 import os
 import sys
 import argparse
+import re
 
 def main():
     parser = argparse.ArgumentParser()
-
 
     path_to_python_file = os.path.abspath(os.path.dirname(__file__))
     # Path that contains all references. This includes a combined reference file containing all references (20), a reference file containing only references with the subtype A (10), a reference file
@@ -20,9 +20,9 @@ def main():
     parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
     parser.add_argument("-o", "--outputDir", help = "Output directory", required = True)
     parser.add_argument("-m", "--medakaModel", help = "Medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
-    parser.add_argument("-a", "--schemeDir", help = "Path to primal scheme if the location of it was changed", default = path_to_primer_scheme)
-    parser.add_argument("-b", "--refDir", help = "Path to directory containing the references if the location was changed", default = path_to_reference)
-
+    parser.add_argument("-p", "--schemeDir", help = "Path to primal scheme if the location of it was changed", default = path_to_primer_scheme)
+    parser.add_argument("-r", "--refDir", help = "Path to directory containing the references if the location was changed", default = path_to_reference)
+    parser.add_argument("-n", "--nextcladeOutput", help = "Output file format of the nextclade results (tsv, csv, json, ndjson, all). Default: tsv", default = "tsv")
     args = parser.parse_args()
 
     path_to_reads = args.input
@@ -31,6 +31,7 @@ def main():
     medaka_model = args.medakaModel
     path_to_primer_scheme = args.schemeDir
     path_to_reference = args.refDir
+    nextclade_output = args.nextcladeOutput
 
 
     # Subtype detection (subtype A or subtype B)
@@ -132,8 +133,8 @@ def main():
         sys.exit("Error: Sample cannot be matched to any subtype. Not enough reads?")
 
     # The subtype and the final reference chosen for the artic pipeline are written into a file.
-    subtype_reference_summary = "subtype_and_reference.txt"
-    with open(output_dir + "/" + subtype_reference_summary, "w") as fout:
+    final_summary = "final_summary.txt"
+    with open(output_dir + "/" + final_summary, "w") as fout:
         fout.write("Subtype: " + final_subtype + "\n")
 
 
@@ -174,8 +175,8 @@ def main():
             fout.write(item[0] + "\t" + str(item[1]) + "\n")
 
     print("Reference: " + final_reference)
-    with open(output_dir + "/subtype_and_reference.txt", "a") as fout:
-        fout.write("Reference: " + final_reference)
+    with open(output_dir + "/" + final_summary, "a") as fout:
+        fout.write("Reference: " + final_reference + "\n")
 
     # Convert reference to directory in which the correct primal scheme for that reference lies
     if "A" in final_reference:
@@ -187,6 +188,57 @@ def main():
 
     # Running the artic pipeline in the conda environment
     os.system(f"conda run -n artic-ncov2019 python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -a {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
+
+    # Running nextclade
+    subtype = final_subtype.lower()
+    consensus_seq = f"{sample}.consensus.fasta"
+
+    os.system(f"nextclade run -d rsv_{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+
+
+    # Writing out the clades into final_summary.txt
+
+    if nextclade_output == "all":
+        nextclade_output = "tsv"
+    with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+        for line in fin:
+            line = line.rstrip()
+            if nextclade_output == "tsv" or nextclade_output == "csv":
+                if nextclade_output == "tsv":
+                    line_list = line.split("\t")
+                elif nextclade_output == "csv":
+                    line_list = line.split(";")
+                if line_list[0] != "index":
+                    clade = line_list[2]
+                    g_clade = line_list[3]
+            if nextclade_output == "json":
+                if "\"clade\":" in line:
+                    line_list = line.split()
+                    clade = line_list[1][1:-2]
+                if "\"G_clade\":" in line:
+                    line_list = line.split()
+                    g_clade = line_list[1][1:-2]
+
+    if nextclade_output == "ndjson":
+        clade = ""
+        g_clade = ""
+        with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+            line_list = re.findall("\{(.*?)\}", line)
+        for element in line_list:
+            if "\"G_clade\"" in element:
+                    new_list = element.split(":")
+                    g_clade = new_list[1][1:-2]
+            elif "clade" in element:
+                    new_list = element.split(":")
+                    clade = new_list[1][1:-2]
+
+    with open(output_dir + "/final_summary.txt", "a") as fout:
+        fout.write("Clade: " + clade + "\n")
+        fout.write("G clade: " + g_clade)
+
+    print("Clade: " + clade)
+    print("G clade: " + g_clade)
+    print("Pipeline finished. View results in the output file \"final_summary.txt\".")
+
 if __name__ == "__main__":
     main()
-
