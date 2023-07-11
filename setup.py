@@ -8,12 +8,12 @@ setup(name="rsv-typer",
       packages = setuptools.find_packages(),
       #packages=["rsv_typer"],
       #package_dir={"rsv-typer": "rsv_typer"},
-      #package_data={"rsv-typer": ["references/*", "primer_scheme/*"]},
+      package_data={"rsv_typer": ["references/*", "primer_scheme/*"]},
+      include_package_data=True,
       entry_points={
           "console_scripts": [
               "rsv-typer=rsv_typer.process_RSV_sample:main"
               ]
           }
       )
-
 
