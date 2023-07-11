@@ -1,0 +1,2 @@
+recursive-include primer_scheme *
+recursive-include references *
