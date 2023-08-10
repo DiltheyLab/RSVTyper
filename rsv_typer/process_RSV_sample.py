@@ -198,13 +198,13 @@ def main():
     subtype = final_subtype.lower()
     consensus_seq = f"{sample}.consensus.fasta"
 
-    os.system(f"nextclade run -d rsv_{subtype} -O {nextclade_dir} -s={nextclade_output} {output_dir}/{artic_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+    os.system(f"nextclade run -d rsv_{subtype} -O {nextclade_dir} -s={nextclade_output} {artic_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
 
 
     # Writing out the clades into final_summary.txt
     if nextclade_output == "all":
         nextclade_output = "tsv"
-    with open(f"{output_dir}/{nextclade_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+    with open(f"{nextclade_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
         for line in fin:
             line = line.rstrip()
             if nextclade_output == "tsv" or nextclade_output == "csv":
