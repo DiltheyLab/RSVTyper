@@ -191,14 +191,14 @@ def main():
     os.system("mkdir " + artic_dir)
     os.chdir(artic_dir)
     os.system(f"python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -p {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
-    
+    os.chdir(../../)
     # Running nextclade
     nextclade_dir = f"{output_dir}/{sample}_nextclade"
     os.system("mkdir " + nextclade_dir)
     subtype = final_subtype.lower()
     consensus_seq = f"{sample}.consensus.fasta"
 
-    os.system(f"nextclade run -d rsv_{subtype} -O {output_dir}/{nextclade_dir} -s={nextclade_output} {output_dir}/{artic_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+    os.system(f"nextclade run -d rsv_{subtype} -O {nextclade_dir} -s={nextclade_output} {output_dir}/{artic_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
 
 
     # Writing out the clades into final_summary.txt
@@ -226,7 +226,7 @@ def main():
     if nextclade_output == "ndjson":
         clade = ""
         g_clade = ""
-        with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+        with open(f"{nextclade_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
             line_list = re.findall("\{(.*?)\}", line)
         for element in line_list:
             if "\"G_clade\"" in element:
