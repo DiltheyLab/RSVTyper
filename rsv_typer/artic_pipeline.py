@@ -11,7 +11,7 @@ parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed f
 parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
 parser.add_argument("-o", "--outputDir", help = "Output directory", required = True)
 parser.add_argument("-m", "--medakaModel", help = "Medaka model that should be used for the artic pipeline (depends on basecaller used)", required = True)
-parser.add_argument("-a", "--schemeDir", help = "Path to primer scheme if the location of it was changed", default = path_to_primer_scheme)
+parser.add_argument("-p", "--schemeDir", help = "Path to primer scheme if the location of it was changed", default = path_to_primer_scheme)
 parser.add_argument("-v", "--version", required = True)
 
 args = parser.parse_args()
