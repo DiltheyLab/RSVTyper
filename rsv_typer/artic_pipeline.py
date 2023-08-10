@@ -30,8 +30,6 @@ for element in barcode_list:
 version = args.version
 sample = args.sample
 
-os.chdir(output_dir)
-
 # Read filtering
 os.system(f"artic guppyplex --skip-quality-check --min-length 350 --max-length 900 --directory {path_to_reads} --prefix demultiplexed")
 
