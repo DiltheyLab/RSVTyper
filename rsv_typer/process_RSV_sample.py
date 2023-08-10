@@ -191,7 +191,7 @@ def main():
     os.system("mkdir " + artic_dir)
     os.chdir(artic_dir)
     os.system(f"python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -p {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
-    os.chdir(../../)
+    os.chdir("../../")
     # Running nextclade
     nextclade_dir = f"{output_dir}/{sample}_nextclade"
     os.system("mkdir " + nextclade_dir)
