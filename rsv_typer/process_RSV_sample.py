@@ -44,7 +44,7 @@ def main():
     alignment = f"{sample}_vs_{reference_subtype[:-6]}"
 
     # The reads are mapped to a combined fasta file of all reference sequences containing both subtypes.
-    minimap_command = f"minimap2 -ax map-ont {path_to_reference}{reference_subtype} {path_to_reads}/*gz > {path_to_subtype_detection}/{alignment}.sam"
+    minimap_command = f"minimap2 -ax map-ont {path_to_reference}{reference_subtype} {path_to_reads}/*fastq* > {path_to_subtype_detection}/{alignment}.sam"
     os.system(minimap_command)
 
     # Only primary alignments are used for the subtype detection.
@@ -145,7 +145,7 @@ def main():
     os.system("mkdir " + reference_selection_directory)
     # Mapping the reads to a combined fasta file containing all references of the detected subtype.
     paf_output = f"{sample}_vs_cluster_{final_subtype}.paf"
-    minimap_command_ref = f"minimap2 -c -x map-ont {path_to_reference}cluster_{final_subtype}_consensus_all.fasta {path_to_reads}/*gz > {reference_selection_directory}/{paf_output}"
+    minimap_command_ref = f"minimap2 -c -x map-ont {path_to_reference}cluster_{final_subtype}_consensus_all.fasta {path_to_reads}/*fastq* > {reference_selection_directory}/{paf_output}"
     os.system(minimap_command_ref)
 
     # This counts the number of primary alignments for each reference.
@@ -187,20 +187,24 @@ def main():
         version = "VB" + cluster_no
 
     # Running the artic pipeline in the conda environment
-    os.system(f"python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -a {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
-
+    artic_dir = f"{output_dir}/{sample}_artic"
+    os.system("mkdir " + artic_dir)
+    os.chdir(artic_dir)
+    os.system(f"python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -p {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
+    os.chdir("../../")
     # Running nextclade
+    nextclade_dir = f"{output_dir}/{sample}_nextclade"
+    os.system("mkdir " + nextclade_dir)
     subtype = final_subtype.lower()
     consensus_seq = f"{sample}.consensus.fasta"
 
-    os.system(f"nextclade run -d rsv_{subtype} -O {output_dir} -s={nextclade_output} {output_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
+    os.system(f"nextclade run -d rsv_{subtype} -O {nextclade_dir} -s={nextclade_output} {artic_dir}/{consensus_seq} --output-basename '{sample}_nextclade'")
 
 
     # Writing out the clades into final_summary.txt
-
     if nextclade_output == "all":
         nextclade_output = "tsv"
-    with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+    with open(f"{nextclade_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
         for line in fin:
             line = line.rstrip()
             if nextclade_output == "tsv" or nextclade_output == "csv":
@@ -222,7 +226,7 @@ def main():
     if nextclade_output == "ndjson":
         clade = ""
         g_clade = ""
-        with open(f"{output_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
+        with open(f"{nextclade_dir}/{sample}_nextclade.{nextclade_output}", "r") as fin:
             line_list = re.findall("\{(.*?)\}", line)
         for element in line_list:
             if "\"G_clade\"" in element:
