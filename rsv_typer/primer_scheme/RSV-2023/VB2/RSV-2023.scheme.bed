@@ -23,6 +23,7 @@ cluster_B_2_consensus	3984	4004	RSV_12_LEFT	2	+
 cluster_B_2_consensus	4309	4340	RSV_11_RIGHT	1	-
 cluster_B_2_consensus	4390	4425	RSV_13_LEFT	1	+
 cluster_B_2_consensus	4453	4481	RSV_12_RIGHT	2	-
+cluster_B_2_consensus	4453	4478	RSV_12_RIGHT_alt	2	-
 cluster_B_2_consensus	4731	4752	RSV_14_LEFT	2	+
 cluster_B_2_consensus	4823	4848	RSV_13_RIGHT	1	-
 cluster_B_2_consensus	5136	5161	RSV_15_LEFT	1	+
