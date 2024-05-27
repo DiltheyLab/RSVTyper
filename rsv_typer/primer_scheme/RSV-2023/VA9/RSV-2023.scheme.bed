@@ -28,8 +28,8 @@ cluster_A_9_consensus	4723	4744	RSV_14_LEFT	2	+
 cluster_A_9_consensus	4815	4840	RSV_13_RIGHT	1	-
 cluster_A_9_consensus	5128	5153	RSV_15_LEFT	1	+
 cluster_A_9_consensus	5234	5259	RSV_14_RIGHT	2	-
-cluster_A_9_consensus	5326	5352	RSV_16_LEFT	2	+
-cluster_A_9_consensus	5328	5352	RSV_16_LEFT_alt	2	+
+cluster_A_9_consensus	5328	5352	RSV_16_LEFT	2	+
+cluster_A_9_consensus	5326	5352	RSV_16_LEFT_alt	2	+
 cluster_A_9_consensus	5709	5732	RSV_15_RIGHT	1	-
 cluster_A_9_consensus	5824	5848	RSV_17_LEFT	1	+
 cluster_A_9_consensus	5919	5945	RSV_16_RIGHT	2	-
@@ -59,8 +59,8 @@ cluster_A_9_consensus	10434	10457	RSV_29_LEFT	1	+
 cluster_A_9_consensus	10578	10607	RSV_28_RIGHT	2	-
 cluster_A_9_consensus	10883	10905	RSV_30_LEFT	2	+
 cluster_A_9_consensus	10972	11001	RSV_29_RIGHT	1	-
-cluster_A_9_consensus	11227	11255	RSV_31_LEFT	1	+
-cluster_A_9_consensus	11229	11255	RSV_31_LEFT_alt	1	+
+cluster_A_9_consensus	11229	11255	RSV_31_LEFT	1	+
+cluster_A_9_consensus	11227	11255	RSV_31_LEFT_alt	1	+
 cluster_A_9_consensus	11313	11346	RSV_30_RIGHT	2	-
 cluster_A_9_consensus	11636	11664	RSV_32_LEFT	2	+
 cluster_A_9_consensus	11745	11768	RSV_31_RIGHT	1	-
