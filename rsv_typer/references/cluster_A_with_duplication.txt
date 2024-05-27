@@ -1,0 +1,7 @@
+cluster_A_1_consensus	5458	5601
+cluster_A_3_consensus	5459	5602
+cluster_A_4_consensus	5457	5600
+cluster_A_6_consensus	5459	5602
+cluster_A_7_consensus	5459	5602
+cluster_A_9_consensus	5458	5601
+cluster_A_10_consensus	5460	5603

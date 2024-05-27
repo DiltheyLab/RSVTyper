@@ -186,12 +186,16 @@ def main():
         cluster_no = final_reference.split("_")[-2]
         version = "VB" + cluster_no
 
-    # Running the artic pipeline in the conda environment
+    # Running the artic pipeline for consensus sequence generation
     artic_dir = f"{output_dir}/{sample}_artic"
     os.system("mkdir " + artic_dir)
     os.chdir(artic_dir)
     os.system(f"python3 {path_to_python_file}/artic_pipeline.py -i {path_to_reads} -m {medaka_model} -p {path_to_primer_scheme} -v {version} -s {sample} -o {output_dir}")
     os.chdir("../../")
+
+    # Running sniffles2 to detect structural variants
+    
+
     # Running nextclade
     nextclade_dir = f"{output_dir}/{sample}_nextclade"
     os.system("mkdir " + nextclade_dir)

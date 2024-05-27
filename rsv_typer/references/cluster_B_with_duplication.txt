@@ -1,0 +1,6 @@
+cluster_B_1_consensus	5398	5517
+cluster_B_2_consensus	5398	5517
+cluster_B_3_consensus	5398	5517
+cluster_B_4_consensus	5398	5517
+cluster_B_5_consensus	5400	5519
+cluster_B_7_consensus	5398	5517
