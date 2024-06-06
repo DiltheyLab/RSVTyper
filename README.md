@@ -7,7 +7,7 @@ Genotyping RSV samples from nanopore sequencing data
 - minimap2
 - samtools >= 1.10
 - nextclade 
-- artic = 1.2.1
+- artic = 1.2.4
 
 ## Bioconda
 This package can be installed via bioconda. All dependencies will be installed as well. 
