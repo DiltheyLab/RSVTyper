@@ -12,13 +12,11 @@ def detect_subtype():
     reference_subtype = "all_consensus_references.fasta"
     coverage_summary = f"{sample}_coverage_summary.txt"
     alignment = f"{sample}_vs_{reference_subtype[:-6]}"
-    minimap_command = f"minimap2 -ax map-ont {path_to_reference}/{reference_subtype} {path_to_reads}/*fastq* > {path_to_subtype_detection}/{alignment}.sam"
-    os.system(minimap_command)
+    minimap_command = f"minimap2 -ax map-ont {path_to_reference}/{reference_subtype} {path_to_reads}/*fastq*"
 
-    convert_to_bam = f"samtools view -1 -S -b -F 256 {path_to_subtype_detection}/{alignment}.sam > {path_to_subtype_detection}/{alignment}.bam"
-    sort = f"samtools sort {path_to_subtype_detection}/{alignment}.bam -o {path_to_subtype_detection}/{alignment}.sorted.bam"
+    sort = f"samtools sort -o {path_to_subtype_detection}/{alignment}.sorted.bam"
     index = f"samtools index {path_to_subtype_detection}/{alignment}.sorted.bam"
-    command_chain = f"{convert_to_bam} && {sort} && {index}"
+    command_chain = f"{minimap_command} | {sort} && {index}"
     os.system(command_chain)
 
     # Determining the number of mapped reads for every reference in the region 3500-5500.
@@ -94,11 +92,10 @@ def detect_duplication(subtype):
     os.system(f"artic guppyplex --skip-quality-check --min-length {amplicon_length[0]} --max-length {amplicon_length[1]} --directory {path_to_reads} --prefix demultiplexed")
     
     dup_alignment = f"{sample}_vs_subtype_{subtype}_with_duplications"
-    minimap_command = f"minimap2 -ax map-ont -c {path_to_reference}/cluster_{subtype}_seqs_with_duplication.fasta {artic_dir}/demultiplexed_{barcode}.fastq > {duplication_dir}/{dup_alignment}.sam"
-    convert_to_bam = f"samtools view -1 -S -b -F 256 {duplication_dir}/{dup_alignment}.sam > {duplication_dir}/{dup_alignment}.bam"
-    samtools_sort = f"samtools sort {duplication_dir}/{dup_alignment}.bam -o {duplication_dir}/{dup_alignment}.sorted.bam"
+    minimap_command = f"minimap2 -ax map-ont -c {path_to_reference}/cluster_{subtype}_seqs_with_duplication.fasta {artic_dir}/demultiplexed_{barcode}.fastq"
+    samtools_sort = f"samtools sort -o {duplication_dir}/{dup_alignment}.sorted.bam"
     samtools_index = f"samtools index {duplication_dir}/{dup_alignment}.sorted.bam"
-    os.system(f"{minimap_command} && {convert_to_bam} && {samtools_sort} && {samtools_index}")
+    os.system(f"{minimap_command} | {samtools_sort} && {samtools_index}")
 
     clusters_duplication_file = f"cluster_{subtype}_with_duplication.txt"
     dup_dict = {}
@@ -201,7 +198,7 @@ def reference_selection(ref_file):
     return version
 
 def artic_minion(version):
-    os.system(f"artic minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 200 --threads 4 --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
+    os.system(f"artic minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 100000 --threads 4 --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
 
 def nextclade(subtype, nextclade_output):
     nextclade_subtype = subtype.lower()
