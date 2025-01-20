@@ -198,7 +198,7 @@ def reference_selection(ref_file):
     return version
 
 def artic_minion(version):
-    os.system(f"artic minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 100000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
+    os.system(f"artic minion --model {medaka_model} --normalise 100000 --threads {threads} --bed {path_to_primer_scheme}/{scheme_version}/{version}/{scheme_version}.scheme.bed --ref {path_to_primer_scheme}/{scheme_version}/{version}/{scheme_version}.reference.fasta --read-file demultiplexed_{barcode}.fastq {sample}")
 
 def nextclade(subtype, nextclade_output):
     nextclade_subtype = subtype.lower()
