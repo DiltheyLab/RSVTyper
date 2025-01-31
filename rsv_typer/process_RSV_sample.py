@@ -89,7 +89,7 @@ def detect_subtype():
 def detect_duplication(subtype):
 
     # Read filtering
-    os.system(f"artic guppyplex --skip-quality-check --min-length {amplicon_length[0]} --max-length {amplicon_length[1]} --directory {path_to_reads} --prefix demultiplexed")
+    os.system(f"PYTHONPATH=/home/coronam/Repositories/artic1.2.4/ python3 -m artic.pipeline guppyplex --skip-quality-check --min-length {amplicon_length[0]} --max-length {amplicon_length[1]} --directory {path_to_reads} --prefix demultiplexed")
     
     dup_alignment = f"{sample}_vs_subtype_{subtype}_with_duplications"
     minimap_command = f"minimap2 -ax map-ont -t {threads} {path_to_reference}/cluster_{subtype}_seqs_with_duplication.fasta {artic_dir}/demultiplexed_{barcode}.fastq"
@@ -198,7 +198,7 @@ def reference_selection(ref_file):
     return version
 
 def artic_minion(version):
-    os.system(f"artic minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 100000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
+    os.system(f"PYTHONPATH=/home/coronam/Repositories/artic1.2.4/ python3 -m artic.pipeline minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 100000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
 
 def nextclade(subtype, nextclade_output):
     nextclade_subtype = subtype.lower()
@@ -262,6 +262,11 @@ def main():
 
     os.chdir(artic_dir)
     artic_minion(final_version)
+
+    #need to remove this
+    command_depth = f"samtools depth -J {artic_dir}/{sample}.primertrimmed.rg.sorted.bam -o {artic_dir}/{sample}_depth.txt"
+    os.system(command_depth)
+    # up until here
 
     os.system("mkdir " + nextclade_dir)
     nextclade(determined_subtype, nextclade_output)
