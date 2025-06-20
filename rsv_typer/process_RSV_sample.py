@@ -7,6 +7,19 @@ import sys
 import argparse
 import re
 
+def check_files(directory):
+    file_set = set()
+    if os.listdir(directory) == []:
+        sys.exit("No fastq files found in the directory. Aborting")
+    else:
+        for file in os.listdir(directory):
+            file_ending = file.split(".")[-1]
+            file_set.add(file_ending)
+        if "fastq" not in file_set:
+            sys.exit("No fastq files found in the directory. Aborting")
+        else:
+            print("Fastq files found. Continuing")
+
 def detect_subtype():
 
     reference_subtype = "all_consensus_references.fasta"
@@ -248,7 +261,7 @@ def nextclade(subtype, nextclade_output):
     print("Pipeline finished. View results in the output file \"final_summary.txt\".")
 
 def main():
-
+    check_files(path_to_reads)
     os.system(f"mkdir {path_to_subtype_detection}")
     determined_subtype = detect_subtype()
 
@@ -262,11 +275,6 @@ def main():
 
     os.chdir(artic_dir)
     artic_minion(final_version)
-
-    #need to remove this
-    command_depth = f"samtools depth -J {artic_dir}/{sample}.primertrimmed.rg.sorted.bam -o {artic_dir}/{sample}_depth.txt"
-    os.system(command_depth)
-    # up until here
 
     os.system("mkdir " + nextclade_dir)
     nextclade(determined_subtype, nextclade_output)
