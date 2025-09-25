@@ -211,7 +211,7 @@ def reference_selection(ref_file):
     return version
 
 def artic_minion(version):
-    os.system(f"PYTHONPATH=/home/coronam/Repositories/artic1.2.4/ python3 -m artic.pipeline minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 100000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
+    os.system(f"PYTHONPATH=/home/coronam/Repositories/artic1.2.4/ python3 -m artic.pipeline minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 9000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
 
 def nextclade(subtype, nextclade_output):
     nextclade_subtype = subtype.lower()
