@@ -140,12 +140,11 @@ def detect_duplication(subtype):
                         cigar_len = 0
                         aln_begin = int(line4[3])
                         new_long_deletions = 0
-                        letter_no = 0
                         last_letter = ""
+                        length_to_remove = 0
                         for i in range(0, end_of_cigar):
                             current_character = cigar[i]
                             if current_character.isdigit() == False:
-                                letter_no += 1
                                 cigar_part = cigar[begin_of_cigar_part:i + 1]
                                 begin_of_cigar_part = i + 1
                                 cigar_len += int(cigar_part[:-1])
@@ -159,15 +158,10 @@ def detect_duplication(subtype):
                                     elif subtype == "B":
                                         if deletion_length >= 50:
                                             new_long_deletions += 1
-                                # hardclipped alignments need different alignment ends and beginnings
-                                if "H" in cigar_part:
-                                    hard_clipped_len = int(cigar_part[:-1])
-                                    # hardclip at the beginning
-                                    if letter_no == 1:
-                                        aln_begin = aln_begin + hard_clipped_len
-                        aln_end = aln_begin + cigar_len
-                        if last_letter == "H":
-                            aln_end = aln_begin + cigar_len - hard_clipped_len
+                                # hard- and softclipped bases should not be counted as they are not part of the alignment
+                                if "H" in cigar_part or "S" in cigar_part:
+                                    length_to_remove += int(cigar_part[:-1])
+                        aln_end = aln_begin + cigar_len - length_to_remove
                         if aln_begin <= dup_dict[aln_cluster_seq][0] and aln_end >= dup_dict[aln_cluster_seq][1]:
                             no_reads += 1
                             long_deletions += new_long_deletions
