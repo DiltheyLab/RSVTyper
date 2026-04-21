@@ -14,7 +14,9 @@ def check_files(directory):
     else:
         for file in os.listdir(directory):
             file_ending = file.split(".")[-1]
+            file_ending_zipped = file.split(".")[-2]
             file_set.add(file_ending)
+            file_set.add(file_ending_zipped)
         if "fastq" not in file_set:
             sys.exit("No fastq files found in the directory. Aborting")
         else:
@@ -218,7 +220,7 @@ def reference_selection(ref_file):
     return version
 
 def artic_minion(version):
-    os.system(f"PYTHONPATH=/home/coronam/Repositories/artic1.2.4/ python3 -m artic.pipeline minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 9000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
+    os.system(f"PYTHONPATH=/home/coronam/Repositories/artic1.2.4/ python3 -m artic.pipeline minion --no-longshot --medaka --medaka-model {medaka_model} --normalise 4000 --threads {threads} --scheme-directory {path_to_primer_scheme} --read-file demultiplexed_{barcode}.fastq {scheme_version}/{version} {sample}")
 
 def nextclade(subtype, nextclade_output):
     nextclade_subtype = subtype.lower()
@@ -293,7 +295,7 @@ path_to_python_file = os.path.abspath(os.path.dirname(__file__))
 path_to_reference = path_to_python_file + "/references/"
 path_to_primer_scheme =  path_to_python_file + "/primer_scheme/"
 amplicon_length = "350, 900"
-scheme_version = "RSV-2023"
+scheme_version = "RSV-2026"
 
 parser.add_argument("-i", "--input", help = "Path to basecalled, demultiplexed fastq-files. It should end with the barcode directory (e.g. barcode15/)", required = True)
 parser.add_argument("-s", "--sample", help = "Name of the sample", required = True)
