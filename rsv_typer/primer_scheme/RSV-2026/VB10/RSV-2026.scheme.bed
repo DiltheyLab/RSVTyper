@@ -83,4 +83,5 @@ cluster_B_10_consensus	14954	14986	RSV_40_RIGHT	1	-
 cluster_B_10_consensus	0	22	RSV_1_LEFT	2	+
 cluster_B_10_consensus	14754	14785	RSV_41_LEFT	2	+
 cluster_B_10_consensus	15196	15228	RSV_41_RIGHT	2	-
-cluster_B_10_consensus	450	485	RSV_1_RIGHT	2	-
+cluster_B_10_consensus	293	326	RSV_1_RIGHT	2	-
+cluster_B_10_consensus	293	323	RSV_1_RIGHT_alt	2	-

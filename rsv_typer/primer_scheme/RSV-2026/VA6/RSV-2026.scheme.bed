@@ -81,6 +81,7 @@ cluster_A_6_consensus	14404	14433	RSV_40_LEFT	1	+
 cluster_A_6_consensus	14485	14514	RSV_39_RIGHT	2	-
 cluster_A_6_consensus	15007	15039	RSV_40_RIGHT	1	-
 cluster_A_6_consensus	0	22	RSV_1_LEFT	2	+
-cluster_A_6_consensus	450	485	RSV_1_RIGHT	2	-
+cluster_A_6_consensus	293	326	RSV_1_RIGHT	2	-
+cluster_A_6_consensus	293	323	RSV_1_RIGHT_alt	2	-
 cluster_A_6_consensus	14807	14838	RSV_41_LEFT	2	+
 cluster_A_6_consensus	15245	15277	RSV_41_RIGHT	2	-
